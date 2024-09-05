@@ -1,54 +1,60 @@
 <script lang="ts">
-	import MyComp from './MyComp.svelte';
+	import { Input, Label, Button } from 'flowbite-svelte';
 
-	let fullList: string[] = ['item 1'];
-	for (let i = 2; i <= 100; i++) {
-		fullList = [...fullList, `item ${i}`];
-	}
-	let toDoList = fullList.slice(0, 5);
+	export let data;
 	let toDoItem = '';
-	function addToList() {
-		toDoList = [...toDoList, toDoItem];
+	async function loadData() {
+		const res = await fetch('/');
+		const loadedData = await res.json();
+		data.todoList = loadedData.data;
+	}
+	async function addToList() {
+		await fetch('/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: toDoItem
+			})
+		});
+		await loadData();
 		toDoItem = '';
 	}
 
-	function showNext(currentIndex: number) {
-		if (currentIndex === 100) return;
-		toDoList = fullList.slice(currentIndex, currentIndex + 5);
-	}
+	async function deleteItem(id: number) {
+		await fetch(`/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: toDoItem
+			})
+		});
 
-	function showPrevious(currentIndex: number) {
-		if (currentIndex === 0) return;
-		toDoList = fullList.slice(currentIndex - 5, currentIndex);
-	}
-	function deleteItem(index: number) {
-		toDoList = toDoList.filter((_, i) => i !== index);
-	}
-
-	function handleNext() {
-		showNext(parseInt(toDoList[4].split(' ')[1]));
-	}
-
-	function handlePrevious() {
-		showPrevious(parseInt(toDoList[0].split(' ')[1]) - 1);
+		await loadData();
 	}
 </script>
 
 <section>
-	<h1>Home</h1>
-	<div>
-		<input bind:value={toDoItem} name="toDoItem" type="text" />
-		<label for="toDoItem">toDo</label>
-		<button on:click={addToList}>Add</button>
+	<div class="container m-auto">
+		<h1>Home</h1>
 		<div>
-			<ul>
-				{#each toDoList as toDoItem, index}
-					<li>{toDoItem} <button on:click={() => deleteItem(index)}>delete</button></li>
-				{/each}
-			</ul>
+			<Label for="toDoItem">toDo</Label>
+			<Input class="w-1/3" bind:value={toDoItem} name="toDoItem" type="text" />
+
+			<Button color="dark" on:click={addToList}>Add</Button>
+			<div>
+				<ul>
+					{#each data.todoList as toDoItem}
+						<li>
+							{toDoItem.name}
+							<Button on:click={() => deleteItem(toDoItem.id)}>delete</Button>
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</div>
-		<button on:click={handleNext}>Next 5</button>
-		<button on:click={handlePrevious}>Previous 5</button>
 	</div>
-	<MyComp />
 </section>

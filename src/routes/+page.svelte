@@ -4,12 +4,12 @@
 	export let data;
 	let toDoItem = '';
 	async function loadData() {
-		const res = await fetch('/api/');
+		const res = await fetch('/api');
 		const loadedData = await res.json();
 		data.todoList = loadedData.data;
 	}
 	async function addToList() {
-		await fetch('/api/', {
+		await fetch('/api', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

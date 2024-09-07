@@ -1,8 +1,60 @@
-<svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
-</svelte:head>
+<script lang="ts">
+	import { Input, Label, Button } from 'flowbite-svelte';
 
-<div class="text-column">
-	<h1>About this app</h1>
-</div>
+	export let data;
+	let toDoItem = '';
+	async function loadData() {
+		const res = await fetch('/');
+		const loadedData = await res.json();
+		data.todoList = loadedData.data;
+	}
+	async function addToList() {
+		await fetch('/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: toDoItem
+			})
+		});
+		await loadData();
+		toDoItem = '';
+	}
+
+	async function deleteItem(id: number) {
+		await fetch(`/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: toDoItem
+			})
+		});
+
+		await loadData();
+	}
+</script>
+
+<section>
+	<div class="container m-auto">
+		<h1>About</h1>
+		<div>
+			<Label for="toDoItem">toDo</Label>
+			<Input class="w-1/3" bind:value={toDoItem} name="toDoItem" type="text" />
+
+			<Button color="dark" on:click={addToList}>Add</Button>
+			<div>
+				<ul>
+					{#each data.todoList as toDoItem}
+						<li>
+							{toDoItem.name}
+							<Button on:click={() => deleteItem(toDoItem.id)}>delete</Button>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>

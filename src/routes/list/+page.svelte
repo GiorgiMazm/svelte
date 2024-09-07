@@ -4,12 +4,12 @@
 	export let data;
 	let toDoItem = '';
 	async function loadData() {
-		const res = await fetch('list/');
+		const res = await fetch('/');
 		const loadedData = await res.json();
 		data.todoList = loadedData.data;
 	}
 	async function addToList() {
-		await fetch('list/', {
+		await fetch('/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -23,7 +23,7 @@
 	}
 
 	async function deleteItem(id: number) {
-		await fetch(`list/${id}`, {
+		await fetch(`/${id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'

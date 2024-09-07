@@ -6,3 +6,8 @@ export async function POST({ request }) {
 	await supabase.from('todolist').insert([data]);
 	return json({ status: 200, message: 'Task created successfully' });
 }
+
+export async function GET() {
+	const data = await supabase.from('todolist').select();
+	return json({ status: 200, data: data.data });
+}

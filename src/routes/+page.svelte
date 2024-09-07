@@ -1,18 +1,15 @@
 <script lang="ts">
 	import { Input, Label, Button } from 'flowbite-svelte';
 
-	//export let data;
-	let data = {
-		todoList: []
-	};
+	export let data;
 	let toDoItem = '';
 	async function loadData() {
-		const res = await fetch(String(import.meta.env.VITE_BACKEND_URL));
+		const res = await fetch('/');
 		const loadedData = await res.json();
 		data.todoList = loadedData.data;
 	}
 	async function addToList() {
-		await fetch(String(import.meta.env.VITE_BACKEND_URL), {
+		await fetch('/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -26,7 +23,7 @@
 	}
 
 	async function deleteItem(id: number) {
-		await fetch(`${import.meta.env.VITE_BACKEND_URL}${id}`, {
+		await fetch(`/${id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -52,8 +49,8 @@
 				<ul>
 					{#each data.todoList as toDoItem}
 						<li>
-							{toDoItem?.name}
-							<Button on:click={() => deleteItem(toDoItem?.id)}>delete</Button>
+							{toDoItem.name}
+							<Button on:click={() => deleteItem(toDoItem.id)}>delete</Button>
 						</li>
 					{/each}
 				</ul>

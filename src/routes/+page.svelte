@@ -4,12 +4,12 @@
 	export let data;
 	let toDoItem = '';
 	async function loadData() {
-		const res = await fetch('/');
+		const res = await fetch(String(import.meta.env.VITE_BACKEND_URL));
 		const loadedData = await res.json();
 		data.todoList = loadedData.data;
 	}
 	async function addToList() {
-		await fetch('/', {
+		await fetch(String(import.meta.env.VITE_BACKEND_URL), {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -23,7 +23,7 @@
 	}
 
 	async function deleteItem(id: number) {
-		await fetch(`/${id}`, {
+		await fetch(`${import.meta.env.VITE_BACKEND_URL}${id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'

@@ -39,7 +39,7 @@
 
 <section>
 	<div class="container m-auto">
-		<h1>About</h1>
+		<h1>Home</h1>
 		<div>
 			<Label for="toDoItem">toDo</Label>
 			<Input class="w-1/3" bind:value={toDoItem} name="toDoItem" type="text" />

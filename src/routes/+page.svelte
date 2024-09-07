@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { Input, Label, Button } from 'flowbite-svelte';
 
-	export let data;
+	//export let data;
+	let data = {
+		todoList: []
+	};
 	let toDoItem = '';
 	async function loadData() {
 		const res = await fetch(String(import.meta.env.VITE_BACKEND_URL));
@@ -49,8 +52,8 @@
 				<ul>
 					{#each data.todoList as toDoItem}
 						<li>
-							{toDoItem.name}
-							<Button on:click={() => deleteItem(toDoItem.id)}>delete</Button>
+							{toDoItem?.name}
+							<Button on:click={() => deleteItem(toDoItem?.id)}>delete</Button>
 						</li>
 					{/each}
 				</ul>

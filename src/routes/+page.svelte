@@ -1,18 +1,13 @@
 <script lang="ts">
 	import { Input, Label, Button } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 
-	let data = { todoList: [] };
+	export let data;
 	let toDoItem = '';
 	async function loadData() {
 		const res = await fetch('/api');
 		const loadedData = await res.json();
 		data.todoList = loadedData.data;
 	}
-
-	onMount(() => {
-		loadData();
-	});
 	async function addToList() {
 		await fetch('/api', {
 			method: 'POST',

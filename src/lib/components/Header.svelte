@@ -8,8 +8,8 @@
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
 			</li>
-			<li aria-current={$page.url.pathname === '/list' ? 'page' : undefined}>
-				<a href="/list">List</a>
+			<li aria-current={$page.url.pathname === '/login' ? 'page' : undefined}>
+				<a href="/login">Login</a>
 			</li>
 		</ul>
 	</nav>

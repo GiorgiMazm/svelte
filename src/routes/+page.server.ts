@@ -1,8 +1,8 @@
-import { supabase } from '$lib/db';
+import type { PageServerLoad } from './$types';
 
-export async function load() {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data } = await supabase.from('todolist').select();
 	return {
 		todoList: data || []
 	};
-}
+};

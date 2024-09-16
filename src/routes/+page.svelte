@@ -3,6 +3,7 @@
 
 	export let data;
 	let toDoItem = '';
+
 	async function loadData() {
 		const res = await fetch('/api');
 		const loadedData = await res.json();

@@ -34,7 +34,7 @@ export const actions: Actions = {
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {
-				redirectTo: 'http://localhost:5173/auth/callback'
+				redirectTo: `${new URL(request.url).origin}/auth/callback`
 			}
 		});
 		if (data.url) {

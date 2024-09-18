@@ -3,9 +3,19 @@
 	import { onMount } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import '../app.css';
+	import { goto } from '$app/navigation';
 
 	export let data;
 	$: ({ session, supabase } = data);
+
+	$: logout = async () => {
+		const { error } = await supabase.auth.signOut();
+		if (error) {
+			console.error(error);
+		} else {
+			await goto('/');
+		}
+	};
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
@@ -19,7 +29,7 @@
 </script>
 
 <div class="app">
-	<Header></Header>
+	<Header {logout}></Header>
 
 	<main>
 		<slot></slot>

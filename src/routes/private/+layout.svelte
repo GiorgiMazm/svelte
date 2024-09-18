@@ -1,4 +1,6 @@
 <script>
+	import { goto } from '$app/navigation';
+
 	export let data;
 	$: ({ supabase } = data);
 
@@ -6,12 +8,15 @@
 		const { error } = await supabase.auth.signOut();
 		if (error) {
 			console.error(error);
+		} else {
+			await goto('/');
 		}
 	};
 </script>
 
 <header>
 	<nav>
+		ALLO bleat
 		<a href="/">Home</a>
 	</nav>
 	<button on:click={logout}>Logout</button>

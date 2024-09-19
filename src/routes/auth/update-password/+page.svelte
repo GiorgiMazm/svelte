@@ -1,6 +1,6 @@
 <script>
 	import { Button, Input, Label } from 'flowbite-svelte';
-	import { LockSolid } from 'flowbite-svelte-icons';
+	import { EyeSlashSolid, EyeSolid, LockSolid } from 'flowbite-svelte-icons';
 
 	export let data;
 	$: ({ supabase } = data);
@@ -12,6 +12,8 @@
 			console.log(error.message);
 		}
 	}
+
+	let hidePassword = true;
 </script>
 
 <div
@@ -24,11 +26,23 @@
 		New Password
 		<Input
 			name="password"
-			type="password"
+			type={hidePassword ? 'password' : 'text'}
 			bind:value={password}
 			class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-400"
 		>
 			<LockSolid slot="left" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
+			<button
+				type="button"
+				slot="right"
+				on:click={() => (hidePassword = !hidePassword)}
+				class="mr-4 h-5 w-5 cursor-pointer text-gray-500 dark:text-gray-400"
+			>
+				{#if hidePassword}
+					<EyeSolid class="h-5 w-5" />
+				{:else}
+					<EyeSlashSolid class="h-5 w-5" />
+				{/if}
+			</button>
 		</Input>
 	</Label>
 

@@ -1,6 +1,13 @@
 <script>
 	import { A, Button, Input, Label } from 'flowbite-svelte';
-	import { EnvelopeSolid, LockSolid, UserSolid } from 'flowbite-svelte-icons';
+	import {
+		EnvelopeSolid,
+		EyeSlashSolid,
+		EyeSolid,
+		LockSolid,
+		UserSolid
+	} from 'flowbite-svelte-icons';
+	let hidePassword = true;
 </script>
 
 <form
@@ -38,10 +45,22 @@
 		Password
 		<Input
 			name="password"
-			type="password"
+			type={hidePassword ? 'password' : 'text'}
 			class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500"
 		>
 			<LockSolid slot="left" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
+			<button
+				type="button"
+				slot="right"
+				on:click={() => (hidePassword = !hidePassword)}
+				class="mr-4 h-5 w-5 cursor-pointer text-gray-500 dark:text-gray-400"
+			>
+				{#if hidePassword}
+					<EyeSolid class="h-5 w-5" />
+				{:else}
+					<EyeSlashSolid class="h-5 w-5" />
+				{/if}
+			</button>
 		</Input>
 	</Label>
 

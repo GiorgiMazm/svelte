@@ -7,8 +7,13 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;
+		const displayName = formData.get('displayName') as string;
 
-		const { error } = await supabase.auth.signUp({ email, password });
+		const { error } = await supabase.auth.signUp({
+			email,
+			password,
+			options: { data: { displayName } }
+		});
 		if (error) {
 			console.error(error);
 			redirect(303, '/auth/error');
@@ -37,8 +42,11 @@ export const actions: Actions = {
 				redirectTo: `${new URL(request.url).origin}/auth/callback`
 			}
 		});
-		if (data.url) {
-			redirect(303, data.url); // use the redirect API for your server framework
+
+		if (error) {
+			console.error(error);
+		} else if (data.url) {
+			redirect(303, data.url);
 		}
 	}
 };

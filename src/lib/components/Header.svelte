@@ -39,9 +39,7 @@
 		{#if session}
 			<Button color="blue" on:click={logout}>Logout</Button>
 		{:else}
-			<Button color="blue" class="mr-3">
-				<A href="/auth">Login</A></Button
-			>
+			<A class="mr-3" href="/auth">Login</A>
 		{/if}
 	</div>
 </Navbar>

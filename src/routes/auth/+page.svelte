@@ -1,20 +1,9 @@
 <script>
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { EnvelopeSolid, GoogleSolid, LockSolid, UserSolid } from 'flowbite-svelte-icons';
-	export let data;
-	$: ({ supabase } = data);
 	let fromType = 'login';
 	function toggleLogin() {
 		fromType = fromType === 'login' ? 'signup' : 'login';
-	}
-
-	let email = '';
-	async function kek() {
-		const { error } = await supabase.auth.resetPasswordForEmail(email);
-
-		if (error) {
-			console.log(error.message);
-		}
 	}
 </script>
 
@@ -62,9 +51,13 @@
 				class="ml-2 flex w-full items-center justify-center rounded-lg border border-gray-500 bg-gray-800 py-2 font-semibold text-white transition-colors duration-300 hover:bg-gray-700 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
 				formaction="?/google"
 			>
-				<GoogleSolid class="mr-2 h-5 w-5 text-white" /> Login with Google
+				Sign in with Google
+				<GoogleSolid class="ml-2 h-5 w-5 text-white" />
 			</Button>
 		</div>
+		<span class="mt-2 block text-center text-sm dark:text-white">
+			<a href="/auth/forgot-password" class="text-blue-500 hover:underline">Forgot password?</a>
+		</span>
 
 		<hr class="my-4 border-t border-gray-300" />
 		<p class="text-center dark:text-white">
@@ -118,19 +111,3 @@
 		</p>
 	{/if}
 </form>
-
-<div>
-	<Label class="text-gray-300">
-		forgot password
-		<Input
-			name="email"
-			type="email"
-			class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500"
-			bind:value={email}
-		>
-			<LockSolid slot="left" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-		</Input>
-	</Label>
-
-	<Button color="dark" on:click={kek}>reset</Button>
-</div>

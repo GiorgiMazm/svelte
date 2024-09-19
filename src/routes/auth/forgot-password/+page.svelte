@@ -4,9 +4,9 @@
 
 	export let data;
 	$: ({ supabase } = data);
-	let password = '';
-	async function resetPassword() {
-		const { error } = await supabase.auth.updateUser({ password: password });
+	let email = '';
+	async function sentEmail() {
+		const { error } = await supabase.auth.resetPasswordForEmail(email);
 
 		if (error) {
 			console.log(error.message);
@@ -21,11 +21,11 @@
 		Reset Your Password
 	</h1>
 	<Label class="text-gray-700 dark:text-gray-300">
-		New Password
+		Your Email
 		<Input
-			name="password"
-			type="password"
-			bind:value={password}
+			name="email"
+			type="email"
+			bind:value={email}
 			class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-400"
 		>
 			<LockSolid slot="left" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -35,14 +35,15 @@
 	<Button
 		type="submit"
 		class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition-colors duration-300 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-		on:click={resetPassword}
+		on:click={sentEmail}
 	>
-		Reset Password
+		Sent email to reset password
 	</Button>
 
 	<p class="text-center text-sm text-gray-600 dark:text-gray-400">
-		Remembered your password? <a href="/" class="text-blue-600 hover:underline dark:text-blue-400"
-			>Home page</a
+		Remembered your password? <a
+			href="/auth"
+			class="text-blue-600 hover:underline dark:text-blue-400">Login</a
 		>
 	</p>
 </div>

@@ -18,9 +18,9 @@
 	<h1 class="mb-6 text-center text-4xl font-bold dark:text-white">Sign up</h1>
 
 	<Label class="text-gray-300">
-		Display Name
+		Name
 		<Input
-			name="displayName"
+			name="fullName"
 			type="text"
 			placeholder="JohnDoe2005"
 			class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500"

@@ -2,6 +2,7 @@
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { EyeSlashSolid, EyeSolid, LockSolid } from 'flowbite-svelte-icons';
 	import Loader from '$lib/components/Loader.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data;
 	$: ({ supabase } = data);
@@ -13,6 +14,8 @@
 
 		if (error) {
 			console.log(error.message);
+		} else {
+			await goto('/');
 		}
 		loading = false;
 	}

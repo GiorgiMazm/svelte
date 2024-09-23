@@ -7,14 +7,20 @@
 	$: ({ supabase } = data);
 	let email = '';
 	let loading = false;
+	let showNotification = false;
+
 	async function sentEmail() {
 		loading = true;
 		const { error } = await supabase.auth.resetPasswordForEmail(email);
 
 		if (error) {
 			console.log(error.message);
-		}
+		} else showNotification = true;
 		loading = false;
+	}
+
+	function closeNotification() {
+		showNotification = false;
 	}
 </script>
 
@@ -24,6 +30,7 @@
 	<h1 class="mb-4 text-center text-3xl font-bold text-gray-900 dark:text-white">
 		Reset Your Password
 	</h1>
+
 	<Label class="text-gray-700 dark:text-gray-300">
 		Your Email
 		<Input
@@ -35,6 +42,21 @@
 			<EnvelopeSolid slot="left" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
 		</Input>
 	</Label>
+
+	{#if showNotification}
+		<div
+			class=" mb-4 flex items-center justify-between rounded-lg bg-blue-50 p-4 text-sm text-blue-800 opacity-100 transition-opacity duration-300 dark:bg-gray-700 dark:text-blue-400"
+			role="alert"
+		>
+			<span>Email to reset your password was sent. Check your email!</span>
+			<button
+				on:click={closeNotification}
+				class="ml-2 text-blue-800 focus:outline-none dark:text-blue-400"
+			>
+				&times;
+			</button>
+		</div>
+	{/if}
 
 	<Button
 		type="submit"

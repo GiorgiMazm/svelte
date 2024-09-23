@@ -1,18 +1,23 @@
-<script>
+<script lang="ts">
 	import { Navbar } from 'flowbite-svelte';
 	import { Button } from 'flowbite-svelte';
 	import { A } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
+	import Loader from '$lib/components/Loader.svelte';
 
 	export let session;
 	export let supabase;
+
+	let loading = false;
 	$: logout = async () => {
+		loading = true;
 		const { error } = await supabase.auth.signOut();
 		if (error) {
 			console.error(error);
 		} else {
 			await goto('/');
 		}
+		loading = false;
 	};
 </script>
 
@@ -37,7 +42,14 @@
 	{/if}
 	<div class="flex md:order-2">
 		{#if session}
-			<Button color="blue" on:click={logout}>Logout</Button>
+			<Button color="blue" disabled={loading} on:click={logout}>
+				{#if loading}
+					<Loader />
+					Logging out...
+				{:else}
+					Logout
+				{/if}</Button
+			>
 		{:else}
 			<A class="mr-3" href="/auth">Login</A>
 		{/if}

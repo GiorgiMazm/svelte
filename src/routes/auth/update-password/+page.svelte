@@ -1,16 +1,20 @@
-<script>
+<script lang="ts">
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { EyeSlashSolid, EyeSolid, LockSolid } from 'flowbite-svelte-icons';
+	import Loader from '$lib/components/Loader.svelte';
 
 	export let data;
 	$: ({ supabase } = data);
 	let password = '';
+	let loading = false;
 	async function resetPassword() {
+		loading = true;
 		const { error } = await supabase.auth.updateUser({ password: password });
 
 		if (error) {
 			console.log(error.message);
 		}
+		loading = false;
 	}
 
 	let hidePassword = true;
@@ -48,10 +52,16 @@
 
 	<Button
 		type="submit"
+		disabled={loading}
 		class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition-colors duration-300 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
 		on:click={resetPassword}
 	>
-		Reset Password
+		{#if loading}
+			<Loader />
+			Resetting password...
+		{:else}
+			Reset password
+		{/if}
 	</Button>
 
 	<p class="text-center text-sm text-gray-600 dark:text-gray-400">

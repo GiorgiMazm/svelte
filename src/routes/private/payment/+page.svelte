@@ -1,5 +1,10 @@
 <script lang="ts">
+	import Loader from '$lib/components/Loader.svelte';
+	import { Button } from 'flowbite-svelte';
+
+	let loading = false;
 	async function handlePayment(paymentId: string) {
+		loading = true;
 		const data = await fetch('/api/pay/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -7,15 +12,52 @@
 		});
 		const obj = await data.json();
 		window.location = obj.url;
+		loading = false;
 	}
 </script>
 
 <div>
-	<h2>Enter :</h2>
+	<h2>Choose :</h2>
 	<div id="card-element"></div>
-	<button on:click={() => handlePayment('price_1Q10IIBCKo7pYt9RgSVwr1Ce')}>Pay 25</button>
+	<Button
+		class="m-4"
+		disabled={loading}
+		color="dark"
+		on:click={() => handlePayment('price_1Q10IIBCKo7pYt9RgSVwr1Ce')}
+	>
+		{#if loading}
+			<Loader />
+			Processing payment...
+		{:else}
+			Pay 25
+		{/if}
+	</Button>
 	<br />
-	<button on:click={() => handlePayment('price_1Q10ajBCKo7pYt9RUjKkQ5OH')}>Pay 40</button>
+	<Button
+		class="m-4"
+		disabled={loading}
+		color="dark"
+		on:click={() => handlePayment('price_1Q10ajBCKo7pYt9RUjKkQ5OH')}
+	>
+		{#if loading}
+			<Loader />
+			Processing payment...
+		{:else}
+			Pay 40
+		{/if}</Button
+	>
 	<br />
-	<button on:click={() => handlePayment('price_1Q1QGjBCKo7pYt9RRrjpIETu')}>Pay 50</button>
+	<Button
+		class="m-4"
+		disabled={loading}
+		color="dark"
+		on:click={() => handlePayment('price_1Q1QGjBCKo7pYt9RRrjpIETu')}
+	>
+		{#if loading}
+			<Loader />
+			Processing payment...
+		{:else}
+			Pay 50
+		{/if}</Button
+	>
 </div>

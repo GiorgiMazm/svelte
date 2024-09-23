@@ -1,16 +1,20 @@
-<script>
+<script lang="ts">
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { EnvelopeSolid } from 'flowbite-svelte-icons';
+	import Loader from '$lib/components/Loader.svelte';
 
 	export let data;
 	$: ({ supabase } = data);
 	let email = '';
+	let loading = false;
 	async function sentEmail() {
+		loading = true;
 		const { error } = await supabase.auth.resetPasswordForEmail(email);
 
 		if (error) {
 			console.log(error.message);
 		}
+		loading = false;
 	}
 </script>
 
@@ -34,10 +38,16 @@
 
 	<Button
 		type="submit"
+		disabled={loading}
 		class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition-colors duration-300 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
 		on:click={sentEmail}
 	>
-		Sent email to reset password
+		{#if loading}
+			<Loader />
+			Sending email...
+		{:else}
+			Sent email to reset password
+		{/if}
 	</Button>
 
 	<p class="text-center text-sm text-gray-600 dark:text-gray-400">

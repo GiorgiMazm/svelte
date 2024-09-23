@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { A, Button, Input, Label } from 'flowbite-svelte';
 	import {
 		EnvelopeSolid,
@@ -7,13 +7,24 @@
 		LockSolid,
 		UserSolid
 	} from 'flowbite-svelte-icons';
+	import { enhance } from '$app/forms';
+	import Loader from '$lib/components/Loader.svelte';
 	let hidePassword = true;
+	let loading = false;
 </script>
 
 <form
 	class="mx-auto mt-10 flex w-full max-w-lg flex-col space-y-4 rounded-lg border p-6 text-gray-200 shadow-lg dark:bg-gray-800"
 	method="POST"
 	action="?/signup"
+	use:enhance={() => {
+		loading = true;
+		return ({ update }) => {
+			update({ invalidateAll: true }).finally(async () => {
+				loading = false;
+			});
+		};
+	}}
 >
 	<h1 class="mb-6 text-center text-4xl font-bold dark:text-white">Sign up</h1>
 
@@ -67,8 +78,15 @@
 	<Button
 		type="submit"
 		class="w-full rounded-lg bg-blue-600 py-2 font-semibold transition-colors duration-300 hover:bg-blue-700"
-		>Sign up</Button
+		disabled={loading}
 	>
+		{#if loading}
+			<Loader />
+			Signing up...
+		{:else}
+			Sign up
+		{/if}
+	</Button>
 
 	<hr class="my-4 border-t border-gray-300" />
 	<p class="text-center dark:text-white">

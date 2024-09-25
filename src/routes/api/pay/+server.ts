@@ -3,7 +3,6 @@ import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, locals, url }) => {
-	console.log(locals);
 	const user = locals.user;
 	const data = await request.json();
 	if (!user) {
@@ -11,7 +10,10 @@ export const POST: RequestHandler = async ({ request, locals, url }) => {
 	}
 	const session = await stripe.checkout.sessions.create({
 		line_items: [{ price: data.paymentId, quantity: 1 }],
-		payment_method_types: ['card', 'paypal', 'giropay'],
+		payment_method_types: ['card', 'paypal'],
+		metadata: {
+			userId: user.id
+		},
 		customer_email: user.email,
 		allow_promotion_codes: true,
 		mode: 'payment',

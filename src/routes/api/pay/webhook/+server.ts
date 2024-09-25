@@ -2,13 +2,12 @@ import { WEBHOOK } from '$env/static/private';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { stripe } from '$lib/stripe';
-import type Stripe from 'stripe';
 import { supabase } from '$lib/db';
+import Stripe from 'stripe';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const whSecret = WEBHOOK;
 	const body = await request.text();
-
 	const signature = request.headers.get('stripe-signature') ?? '';
 
 	try {
@@ -17,23 +16,15 @@ export const POST: RequestHandler = async ({ request }) => {
 		const eventType = event.type;
 
 		if (eventType === 'checkout.session.completed') {
-			const sessionWithCustomer = await stripe.checkout.sessions.retrieve(event.data.object.id, {
-				expand: ['customer']
-			});
-
-			const customer = sessionWithCustomer.customer as Stripe.Customer;
-			console.log('Customer:', customer.email);
-			console.log('You did it Brock!!');
-			supabase
-				.from('users')
-				.update({ stripe_customer_id: customer.id })
-				.eq('email', customer.email);
+			const session = event.data.object as Stripe.Checkout.Session;
+			const userId = session.metadata?.userId;
+			await supabase.from('users').update({ plan: 'PRO' }).eq('id', userId);
 		} else {
-			console.log('you have lost!');
+			console.log('Unhandled event type:', eventType);
 		}
 	} catch (err) {
-		console.log('Something went wrong.', err);
-		error(500);
+		console.error('Error processing webhook:', err);
+		error(500, 'Webhook error');
 	}
 
 	return json({ success: true });

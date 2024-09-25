@@ -7,8 +7,9 @@
 
 	export let session;
 	export let supabase;
-
+	export let isPaid;
 	let loading = false;
+
 	$: logout = async () => {
 		loading = true;
 		const { error } = await supabase.auth.signOut();
@@ -38,6 +39,13 @@
 			href="/private/payment"
 			class="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 md:p-0 md:hover:bg-transparent md:hover:text-blue-700"
 			>Payment</A
+		>
+	{/if}
+	{#if isPaid}
+		<A
+			href="/private/paid-content"
+			class="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 md:p-0 md:hover:bg-transparent md:hover:text-blue-700"
+			>Paid content</A
 		>
 	{/if}
 	<div class="flex md:order-2">

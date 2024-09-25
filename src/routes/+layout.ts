@@ -26,18 +26,30 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 				}
 			});
 
+	// Use `getSession` to get the current session.
+
+	const { data: sessionData } = await supabase.auth.getSession();
+	const session = sessionData?.session;
+
+	//Fetch the authenticated user.
+	const { data: userData } = await supabase.auth.getUser();
+	const user = userData?.user;
+
 	/**
-	 * It's fine to use `getSession` here, because on the client, `getSession` is
-	 * safe, and on the server, it reads `session` from the `LayoutData`, which
-	 * safely checked the session using `safeGetSession`.
+	 * Check if the user has a plan in the database.
 	 */
-	const {
-		data: { session }
-	} = await supabase.auth.getSession();
+	let isPaid = false;
+	if (session?.user?.id) {
+		const { data, error } = await supabase.from('users').select('plan').eq('id', session.user.id);
+		if (error) {
+			console.error(error);
+		} else if (data && data.length > 0) {
+			isPaid = Boolean(data[0]?.plan); // Set the isPaid flag based on user's plan
+		}
+	}
 
-	const {
-		data: { user }
-	} = await supabase.auth.getUser();
-
-	return { session, supabase, user };
+	/**
+	 * Return the session, supabase client, user, and isPaid status as an object.
+	 */
+	return { session, supabase, user, isPaid };
 };

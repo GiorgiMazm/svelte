@@ -5,7 +5,7 @@
 	import '../app.css';
 
 	export let data;
-	$: ({ session, supabase } = data);
+	$: ({ session, supabase, isPaid } = data);
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
@@ -19,7 +19,7 @@
 </script>
 
 <div>
-	<Header {supabase} {session}></Header>
+	<Header {isPaid} {supabase} {session}></Header>
 
 	<main>
 		<slot></slot>

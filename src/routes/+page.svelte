@@ -1,5 +1,50 @@
-<script>
+<script lang="ts">
 	import { Button } from 'flowbite-svelte';
+	import { slide } from 'svelte/transition';
+
+	let faqs = [
+		{
+			question: 'What makes your solution different from others?',
+			answer:
+				'Our solution stands out with its cutting-edge AI technology, user-friendly interface, and unparalleled customer support. We offer customizable features that adapt to your specific business needs, ensuring maximum efficiency and ROI.',
+			isOpen: false
+		},
+		{
+			question: 'How long does it take to set up and integrate with my existing systems?',
+			answer:
+				'The setup process typically takes 1-3 business days, depending on the complexity of your existing systems. Our expert team will guide you through every step, ensuring a smooth integration with minimal disruption to your operations.',
+			isOpen: false
+		},
+		{
+			question: 'Is my data secure with your platform?',
+			answer:
+				"Absolutely. We employ bank-grade encryption and adhere to the highest industry standards for data security. Our platform undergoes regular security audits, and we're compliant with GDPR, CCPA, and other relevant data protection regulations.",
+			isOpen: false
+		},
+		{
+			question: 'Do you offer a free trial?',
+			answer:
+				'Yes, we offer a 14-day free trial for all our plans. This allows you to explore our features and see how our solution can benefit your business before making a commitment.',
+			isOpen: false
+		},
+		{
+			question: 'What kind of support do you provide?',
+			answer:
+				'We offer 24/7 customer support via chat, email, and phone. Our Professional and Enterprise plans include priority support and a dedicated account manager to ensure you get the most out of our platform.',
+			isOpen: false
+		},
+		{
+			question: 'Can I upgrade or downgrade my plan at any time?',
+			answer:
+				'Yes, you can easily upgrade or downgrade your plan at any time through your account dashboard. Changes will be reflected in your next billing cycle, and our team is always available to assist with any questions about plan changes.',
+			isOpen: false
+		}
+	];
+
+	function toggleFaq(index: number) {
+		faqs[index].isOpen = !faqs[index].isOpen;
+		faqs = faqs; // Trigger reactivity
+	}
 </script>
 
 <main class="container mx-auto px-4">
@@ -174,6 +219,46 @@
 
 	<!-- Divider -->
 	<hr class="my-10 border-gray-300" />
+	<section id="faq" class="bg-gray-100 py-20">
+		<div class="container mx-auto px-4">
+			<h2 class="mb-12 text-center text-3xl font-bold">Frequently Asked Questions</h2>
+			<div class="mx-auto max-w-3xl">
+				<div class="space-y-6">
+					{#each faqs as faq, index}
+						<div class="overflow-hidden rounded-lg bg-white shadow-md">
+							<button
+								class="flex w-full items-center justify-between px-6 py-4 text-left font-semibold focus:outline-none"
+								on:click={() => toggleFaq(index)}
+							>
+								{faq.question}
+								<svg
+									class={`h-5 w-5 transition-transform duration-300 ${
+										faq.isOpen ? 'rotate-180 transform' : ''
+									}`}
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M19 9l-7 7-7-7"
+									></path>
+								</svg>
+							</button>
+							{#if faq.isOpen}
+								<div class="bg-gray-50 px-6 py-4" transition:slide>
+									<p>{faq.answer}</p>
+								</div>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			</div>
+		</div>
+	</section>
 </main>
 <footer class="bg-gray-800 py-8 text-white">
 	<div class="container mx-auto px-4 text-center">
